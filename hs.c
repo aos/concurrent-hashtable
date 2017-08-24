@@ -129,7 +129,7 @@ char* find(const char *check) {
 
       pthread_mutex_unlock(&(hashtable[index]->lock));
       // Found value
-
+      return checker->value;
     }
     checker->next = checker;
   }
@@ -161,7 +161,7 @@ int remove(const char *value) {
         hashtable[index]->count--;
 
         pthread_mutex_unlock(&(hashtable[index]->lock));
-        return 0;
+        return 0; // Success
       }
       else {
         // Link previous node with one after current
