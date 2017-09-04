@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall 
 OBJECTS=table.o table_funcs.o
 
 table: $(OBJECTS)

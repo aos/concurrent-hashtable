@@ -29,12 +29,6 @@ typedef struct _thread_data {
   char*         value;
 } thread_data;
 
-// Initialize global list lock
-pthread_mutex_t list_lock = PTHREAD_MUTEX_INITIALIZER;
-
-// Initialize hash table 
-list_l *hashtable[HASHSIZE] = {0};
-
 // Table function definitions
 int insert(char *value);
 

@@ -11,10 +11,17 @@ void *worker(void *value) {
   pthread_threadid_np(NULL, &tid);
 
   // Count # of lines
-  int *counter = malloc(sizeof (int));
+  //int *counter = malloc(sizeof (int));
+  long counter = 0;
 
   // Open file
-  FILE *fp = fopen((char*) value, "R");
+  FILE *fp = fopen((char*) value, "r");
+
+  printf("File name: %s\n", (char *) value);
+
+  if (fp == NULL) {
+    printf("Open failed\n");
+  }
 
   // Initialize line pointer, length, and line capacity
   char *line = NULL;
@@ -23,22 +30,22 @@ void *worker(void *value) {
 
   while ((linelen = getline(&line, &linecap, fp)) > 0) {
     insert(line);
-    printf("Inserted line.\n");
-    char *string = find(line);
-    printf("Found string: %s\n", string);
-
-    printf("Thread id (%llu), value: %s\n", tid, string);
+    // char *string = find(line);
+    // printf("Thread id (%llu), value: %s\n", tid, string);
     counter++;
   }
 
-  return (void *) counter;
+  return (void*) counter;
 }
 
 int
 main(int argc, char *argv[])
 {
 
-  char *files[] = {"sowpods.txt", "large.txt", "author-quote.txt"};
+  char *files[] = {"sowpods.txt", "large.txt", "francais.txt"};
+
+  // Total line counter
+  int total = 0;
 
   // Pointers for worker thread return values
   void *ret[3];
@@ -49,16 +56,11 @@ main(int argc, char *argv[])
     pthread_create(&p[i], NULL, worker, files[i]);
   }
 
-  for (int i = 0; i < NUMTHREADS; i++) {
+  for (int i = 0; i < 3; i++) {
     pthread_join(p[i], &ret[i]); 
-
-    if (ret[i]) {
-      printf("Returned value to main: %d\n", (int) ret[i]);
-    }
-    else {
-      fprintf(stderr, "Value not found in table.\n");
-    }
+    total = total + (int) ret[i];
   }
 
+  printf("Total number of lines: %d\n", total);
   return 0;
 }

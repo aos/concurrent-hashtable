@@ -1,5 +1,11 @@
 #include "table.h"
 
+// Initialize global list lock
+pthread_mutex_t list_lock = PTHREAD_MUTEX_INITIALIZER;
+
+// Initialize hash table 
+list_l *hashtable[HASHSIZE] = {0};
+
 // Hash function
 size_t hash(const char *str) {
   size_t hash = 5381;
