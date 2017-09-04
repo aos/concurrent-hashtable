@@ -17,8 +17,6 @@ void *worker(void *value) {
   // Open file
   FILE *fp = fopen((char*) value, "r");
 
-  printf("File name: %s\n", (char *) value);
-
   if (fp == NULL) {
     printf("Open failed\n");
   }
@@ -34,6 +32,8 @@ void *worker(void *value) {
     // printf("Thread id (%llu), value: %s\n", tid, string);
     counter++;
   }
+
+  printf("Thread (%ud) -> file name: %s, number of words: %ld\n", tid, (char *) value, counter);
 
   return (void*) counter;
 }
@@ -65,6 +65,6 @@ main(int argc, char *argv[])
     total = total + (int) ret[i];
   }
 
-  printf("Total number of lines: %d\n", total);
+  printf("Total number of words: %d\n", total);
   return 0;
 }

@@ -10,6 +10,8 @@ Each node structure contains a value and a next pointer. The nodes do not contai
 
 The table supports `insert()`, `find()`, and `remove()` methods currently. 
 
+The current implementation of the hashtable works by passing in file names into main, and each thread opens a separate file. The threads each run through the file assigned to them and insert each word into the global hashtable. Each threads runs a counter of number of words inserted which is returned to the main thread. The main thread tallies all words and prints total number of words inserted.
+
 ### Notes on concurrency
 
 The hashtable is not lock-free. Additionally, the locks are implemented per linked list (bucket). This allows for manipulation of other buckets without having to lock the entire hashtable.
