@@ -33,7 +33,7 @@ void *worker(void *value) {
     counter++;
   }
 
-  printf("Thread (%ud) -> file name: %s, number of words: %ld\n", tid, (char *) value, counter);
+  printf("Thread (%llu) -> file: %s, words: %ld\n", tid, (char *) value, counter);
 
   return (void*) counter;
 }
@@ -41,12 +41,9 @@ void *worker(void *value) {
 int
 main(int argc, char *argv[])
 {
-  /** TODO:
-   * Allow files to be added on command-line,
-   * instead of being hard-coded in.
-  */
+   // TODO: Allow files to be added as command-line arguments
 
-  char *files[] = {"sowpods.txt", "large.txt", "francais.txt"};
+  char *files[] = {"dictionaries/sowpods.txt", "dictionaries/large.txt", "dictionaries/francais.txt"};
 
   // Total line counter
   int total = 0;
