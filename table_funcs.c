@@ -1,34 +1,4 @@
-/*
- * Thread-safe concurrent hash table implementation
- *
- * Locking is implemented per-list. In this way, it is possible to
- * access multiple lists without waiting for a lock.
-*/
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-
-#define HASHSIZE (1013)
-#define NUMTHREADS (2)
-
-// Node structure
-typedef struct _node_l {
-  char             *value;
-  struct _node_l   *next;
-} node_l;
-
-// Linked list structure
-typedef struct _list_l {
-  node_l            *head;
-  int               count;
-  pthread_mutex_t   lock;
-} list_l;
-
-// Initialize global list lock
-pthread_mutex_t list_lock = PTHREAD_MUTEX_INITIALIZER;
+#include "table.h"
 
 // Hash function
 size_t hash(const char *str) {
@@ -55,9 +25,6 @@ list_l* list_init() {
 
   return new_list;
 }
-
-// Initialize hash table 
-list_l *hashtable[HASHSIZE] = {0};
 
 // Create a new node
 node_l* create_node(char *value) {
@@ -181,54 +148,4 @@ int remove(const char *value) {
   pthread_mutex_unlock(&(hashtable[index]->lock));
   // Did not find value
   return 1;
-}
-
-void *worker(void *value) {
-  uint64_t tid;
-  pthread_threadid_np(NULL, &tid);
-
-  insert(value);
-  char *string = find(value);
-
-  printf("Thread id (%llu), value: %s\n", tid, string);
-
-  int lost = remove(value);
-  printf("Deleted? %d\n", lost);
-
-  char *s2 = find(value);
-
-  printf("Thread id (%llu), value after delete? %s\n", tid, s2);
-
-  return s2;
-}
-
-int
-main(int argc, char *argv[])
-{
-  char *string[2]; 
-
-  string[0] = "Hi there!";
-  string[1] = "Good bye!";
-
-  // Pointers for worker thread return values
-  void *ret[NUMTHREADS];
-
-  pthread_t p[NUMTHREADS];
-
-  for (int i = 0; i < NUMTHREADS; i++) {
-    pthread_create(&p[i], NULL, worker, string[i]);
-  }
-
-  for (int i = 0; i < NUMTHREADS; i++) {
-    pthread_join(p[i], &ret[i]); 
-
-    if (ret[i]) {
-      printf("Returned value to main: %s\n", (char *) ret[i]);
-    }
-    else {
-      fprintf(stderr, "Value not found in table.\n");
-    }
-  }
-
-  return 0;
 }
