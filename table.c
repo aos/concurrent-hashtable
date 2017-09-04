@@ -41,6 +41,10 @@ void *worker(void *value) {
 int
 main(int argc, char *argv[])
 {
+  /** TODO:
+   * Allow files to be added on command-line,
+   * instead of being hard-coded in.
+  */
 
   char *files[] = {"sowpods.txt", "large.txt", "francais.txt"};
 
