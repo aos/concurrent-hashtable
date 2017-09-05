@@ -90,6 +90,10 @@ int insert(char *value) {
 char* find(const char *check) {
   size_t index = hash(check);
 
+  // Make sure list exists
+  if (hashtable[index] == NULL) {
+    return NULL;
+  }
   // Lock at hashtable index
   pthread_mutex_lock(&(hashtable[index]->lock));
 
@@ -104,7 +108,7 @@ char* find(const char *check) {
       // Found value
       return checker->value;
     }
-    checker->next = checker;
+    checker = checker->next;
   }
 
   pthread_mutex_unlock(&(hashtable[index]->lock));
