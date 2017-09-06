@@ -10,7 +10,20 @@ Each node structure contains a value and a next pointer. The nodes do not contai
 
 The table supports `insert()`, `find()`, and `remove()` methods currently. 
 
-The current implementation of the hashtable works by passing in file names into main, and each thread opens a separate file. The threads each run through the file assigned to them and insert each word into the global hashtable. Each threads runs a counter of number of words inserted which is returned to the main thread. The main thread tallies all words and prints total number of words inserted.
+### Usage
+
+Passing in dictionaries (provided in `dictionaries/`) as command line arguments will spawn a new thread for each dictionary.
+
+Passing in the option `-p` before dictionaries will plot the hash distribution. This requires `gnuplot` to be installed first.
+
+First clone and run `make`.
+
+Then:
+```
+./table dictionaries/francias.txt dictionaries/espanol.txt <more dictionaries...>
+
+./table -p <dictionaries...>
+```
 
 ### Notes on concurrency
 

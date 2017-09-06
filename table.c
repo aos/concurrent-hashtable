@@ -11,6 +11,10 @@ int
 main(int argc, char *argv[])
 {
 
+  // Total arguments
+  int args = (strcmp(argv[1], "-p") == 0) ? 2 : 1;
+  int targs = argc - args;
+
   // Total line counter
   int total = 0;
   
@@ -18,16 +22,16 @@ main(int argc, char *argv[])
   double running_time = 0.0;
 
   // Pointers for worker thread return values
-  void *ret[argc - 1];
+  void *ret[targs];
 
-  pthread_t p[argc - 1];
+  pthread_t p[targs];
 
   getrusage(RUSAGE_SELF, &before);
-  for (int i = 0; i < argc - 1; i++) {
-    pthread_create(&p[i], NULL, worker, argv[i + 1]);
+  for (int i = 0; i < targs; i++) {
+    pthread_create(&p[i], NULL, worker, argv[i + args]);
   }
 
-  for (int i = 0; i < argc - 1; i++) {
+  for (int i = 0; i < targs; i++) {
     pthread_join(p[i], &ret[i]); 
     total = total + (int) ret[i];
   }
@@ -37,9 +41,11 @@ main(int argc, char *argv[])
   running_time = calculate(&before, &after);
 
   // Plot hash distribution
-  plot_distribution();
+  if (args == 2) {
+    plot_distribution();
+  }
 
-  printf("\nThreads: %d\nTotal number of words: %d\n", argc - 1, total);
+  printf("\nThreads: %d\nTotal number of words: %d\n", targs, total);
   printf("Running time: %.2f seconds\n", running_time);
   return 0;
 }
