@@ -25,7 +25,7 @@ void *worker(void *value) {
 
   while ((linelen = getline(&line, &linecap, fp)) > 0) {
     insert(line);
-    char *string = find(line);
+    find(line);
 
     counter++;
   }

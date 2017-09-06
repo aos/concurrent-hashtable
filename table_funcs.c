@@ -159,3 +159,36 @@ int remove(const char *value) {
   // Did not find value
   return 1;
 }
+
+int plot_distribution() {
+
+  FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
+
+  if (gnuplotPipe == NULL) {
+    printf("gnuplotPipe open failed.\n");
+  }
+
+  fprintf(gnuplotPipe, "set title \"Hash Distribution\"\n");
+  fprintf(gnuplotPipe, "plot '-' \n");
+
+  for (int i = 0; i < HASHSIZE; i++) {
+    fprintf(gnuplotPipe, "%d %d\n", i, (hashtable[i]->count ? hashtable[i]->count : 0));
+  }
+
+  fprintf(gnuplotPipe, "e");
+  fclose(gnuplotPipe);
+  return 0;
+}
+
+double calculate(const struct rusage *b, const struct rusage *a) {
+  if (a == NULL || b == NULL) {
+    return 0.0;
+  }
+  else {
+    return ((((a->ru_utime.tv_sec * 1000000 + a->ru_utime.tv_usec) -
+              (b->ru_utime.tv_sec * 1000000 + b->ru_utime.tv_usec)) +
+              ((a->ru_stime.tv_sec * 1000000 + a->ru_stime.tv_usec) -
+              (b->ru_stime.tv_sec * 1000000 + b->ru_stime.tv_usec)))
+              / 1000000.0);
+   }
+}
