@@ -10,6 +10,8 @@ Each node structure contains a value and a next pointer. The nodes do not contai
 
 The table supports `insert()`, `find()`, and `remove()` methods currently. 
 
+(Note: This is a very naive approach with a constant size hashtable. No load-balancing was implemented.) 
+
 ### Usage
 
 Passing in dictionaries (provided in `dictionaries/`) as command line arguments will spawn a new thread for each dictionary.
@@ -26,7 +28,7 @@ Then:
 ```
 
 #### Example distribution plot
-![Distribution Plot](distribution.png)
+![Distribution Plot](distribution_plot.png)
 
 The `x-axis` indicates hashtable buckets, the `y-axis` indicates the number of linked list nodes.
 
